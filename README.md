@@ -1,229 +1,319 @@
-# Azure Data Factory for Data Engineers – Covid-19 Analytics Project
+# 📘 Azure Data Factory for Data Engineers — Covid-19 Analytics Project
 
-This project showcases an **end-to-end Data Engineering project** built on **Azure Data Factory (ADF)** to design and orchestrate a scalable Covid-19 data platform.  
-The project demonstrates real-world data ingestion, transformation, orchestration, and reporting workflows used by Data Engineers in production systems.
+This repository contains a full **end-to-end Azure Data Engineering project** built around real Covid-19 datasets from **ECDC (European Centre for Disease Prevention and Control)** and **Eurostat**.
 
----
+The project demonstrates real-world enterprise data engineering skills:
 
-## 🚀 Project Overview
-
-During the Covid-19 pandemic, global agencies required **timely, trusted, and analytics-ready data** to track trends such as:
-
-- Case numbers & deaths  
-- Hospital & ICU occupancy  
-- Testing levels and positivity  
-- Country responses  
-- Population impact by age groups  
-
-This project builds a modern **Azure Data Engineering pipeline** to ingest, clean, transform, and serve Covid-19 datasets using enterprise Azure tools.
+- Designing & orchestrating data pipelines
+- Ingesting data from HTTP APIs & Blob Storage
+- Applying transformations using ADF Mapping Data Flows & Databricks
+- Creating analytics-ready star schema tables in Azure SQL
+- Building a Power BI report for Covid-19 insights
+- Implementing scheduled pipelines, validations, monitoring, and alerts
 
 ---
 
-## 🎯 Project Objectives
+# 🏗️ Solution Architecture
 
-- Ingest Covid-19 data from **ECDC, Eurostat, and API sources**
-- Store raw and curated data in **Azure Data Lake Storage Gen2**
-- Transform data using:
-  - **ADF Mapping Data Flows**
-  - **Azure Databricks (PySpark)**
-- Load curated data into **Azure SQL Database**  
-- Build **Power BI dashboards** for analytics  
-- Automate workflow execution with **ADF Pipelines & Triggers**  
+![Covid-19 Architecture](assets/Untitled%20Diagram-Page-6.drawio.png)
 
 ---
 
-## 🧱 High-Level Architecture
-
-
-
----
-
-### Data Sources
-- Covid-19 Cases & Deaths (ECDC)
-- Hospital admissions, ICU occupancy (ECDC)
-- Covid testing & positivity rates (ECDC)
-- Country response indicators (ECDC)
-- Population by age group (Eurostat)
-
-### Azure Components Used
-- **Azure Blob Storage**
-- **Azure Data Lake Gen2**
-- **Azure Data Factory**
-- **Azure Databricks**
-- **Azure SQL Database**
-- **Azure Monitor & Log Analytics**
-
----
-
-## 🧰 Tech Stack
-
-- **Data Storage:** ADLS Gen2, Blob, SQL DB  
-- **Orchestration:** Azure Data Factory  
-- **Transformations:** Data Flows, PySpark (Databricks)
-- **Compute:** Databricks Cluster,
-- **Analytics:** Power BI  
-
----
-
-## 📂 Repository Structure
-
-
-
+# 📁 Repository Structure
+azure-data-factory-covid19-project/
+│
+├── assets/                             # Architecture diagrams & pipeline screenshots
+│
+├── databricks_notebooks/
+│   ├── nb_transform_population_data.ipynb
+│   └── nb_transform_testing_data.ipynb
+│
+├── data/
+│   ├── input_data/
+│   │   ├── ecdc_data/
+│   │   └── eurostat_data/
+│   │
+│   ├── lookup_data/
+│   │   ├── country_lookup.csv
+│   │   └── dim_date.csv
+│   │
+│   ├── raw/
+│   │   └── ecdc_data/
+│   │
+│   ├── processed/
+│   │   ├── ecdc/
+│   │   └── population/
+│   │
+│   ├── sql_scripts/
+│       └── create_covid_tables_ddl.sql
+│
+├── power_bi_reports/
+│   └── Covid-19 Trends By Country.pbix
+│
+└── README.md
 
 ---
 
-## 1️⃣ Environment Setup
+# 1️⃣ Environment Setup
 
-Provisioned Azure resources:
-
-- Storage Account (Blob + ADLS Gen2)
-- Azure Data Factory Instance
-- Azure SQL Database
-- Databricks Workspace + Cluster
-- Key Vault for credential management
+To run this project end-to-end, the following Azure resources were provisioned:
 
 ---
 
-## 2️⃣ Raw Data Ingestion
+### 🔹 Azure Storage Account (Blob + ADLS Gen2)
 
-### Population Data (Blob → ADLS Gen2)
-
-- Source: `population_by_age.tsv.gz`
-- ADF Copy Activity extracts GZip file into ADLS Raw Zone.
-- Validates file structure and size.
-
-### ECDC Data (HTTP → ADLS Gen2)
-
-Pipeline ingests:
-
-- Cases & Deaths  
-- Hospital Admissions  
-- Testing Data  
-- Country Response Indicators  
-
-Key Features:
-
-- Reusable pipelines with parameters  
-- HTTP Linked Service  
-- Metadata-driven ingestion (ForEach + Lookup)  
-- Writes to:  
-  - raw/ecdc/
-  - raw/population/
+- Enabled **hierarchical namespace**
+- Used for:
+  - `/input_data` (raw files before ingestion)
+  - `/raw` (ADF ingestion zone)
+  - `/processed` (transformed zone)
+  - `/lookup_data` (reference files)
 
 ---
 
-## 3️⃣ Transformations
+### 🔹 Azure Data Factory
 
-### ✔ ADF Mapping Data Flows
+Acts as the **orchestration engine**, responsible for:
 
-#### a) Cases & Deaths
-- Cleans dataset  
-- Joins country reference data  
-- Pivot indicators into columns  
-- Writes curated output  
+- Ingesting ECDC & Eurostat files
+- Executing Databricks notebooks
+- Running Mapping Data Flows
+- Loading data into SQL DB
+- Pipeline scheduling & monitoring
 
-#### b) Hospital & ICU Occupancy
-- Cleans raw data  
-- Creates daily & weekly versions  
-- Computes start/end week dates  
-- Writes both datasets to curated zone  
+**ADF Pipelines:**  
+![Pipelines](assets/Screenshot%202025-11-14%20220923.png)
 
 ---
 
-### ✔ Databricks PySpark 
+### 🔹 Azure Databricks
 
-## Testing Data
-- Cleans testing data  
-- Derives week information  
-- Joins reference dimensions  
-- Writes curated dataset  
+Used for transformations that require heavy compute:
 
----
+- Parsing population dataset
+- Cleaning testing dataset
+- Creating aggregated age groups
+- Writing curated outputs to ADLS
 
-## Population Data
-
-1. Mount ADLS using service principal  
-2. Read population TSV  
-3. Split, clean, and reshape data  
-4. Map geo codes → country names  
-5. Aggregate populations into age groups  
-6. Write curated output  
+![Databricks pipeline activity](assets/Screenshot%202025-11-14%20221008.png)
 
 ---
 
-## 4️⃣ Loading into Azure SQL Database
+### 🔹 Azure SQL Database
 
-Using ADF Copy Activities:
+Serves as the **analytics database** supporting Power BI dashboards. Tables include:
 
-- Load curated data into star schema:
 - `dim_country`
-- `dim_calendar`
-- `dim_population_age_group`
+- `dim_date`
 - `fact_cases_deaths`
 - `fact_hospital_admissions_daily`
 - `fact_hospital_admissions_weekly`
 - `fact_testing`
+- `dim_population_age_group`
 
-This enables downstream BI reporting & analytics.
-
----
-
-## 5️⃣ Orchestration & Scheduling
-
-### Pipelines include:
-- Ingestion Pipelines  
-- Transformation Pipelines  
-- Master Orchestration Pipeline  
-
-### Triggers Used:
-- **Schedule Trigger** (daily or weekly)  
-- **Tumbling Window Trigger** (for backfill)  
-- **Event Trigger** (file arrival-based)  
-
-Dependencies managed using:
-
-- Pipeline chaining  
-- Activity dependencies  
-- Failure policies  
+SQL DDL script located here:  
+`/data/sql_scripts/create_covid_tables_ddl.sql`
 
 ---
 
-## 6️⃣ Monitoring & Alerting
+### 🔹 Azure Key Vault
 
-Monitoring implemented using:
+Securely stores:
+
+- Service Principal credentials
+- Storage account keys
+- SQL credentials
+
+---
+
+# 2️⃣ Raw Data Ingestion Pipelines
+
+---
+
+## ✔ Ingest ECDC Data (HTTP → ADLS Gen2)
+
+ADF dynamically retrieves all available CSV files using:
+
+- **Lookup**
+- **ForEach**
+- **Copy Activity**
+
+![ECDC pipeline](assets/Screenshot%202025-11-14%20221208.png)
+
+---
+
+## ✔ Ingest Population Data (Blob → ADLS Gen2)
+
+Pipeline performs:
+
+- File existence check
+- Metadata validation
+- Copy to raw zone
+- Delete source file if valid
+
+![Population pipeline](assets/Screenshot%202025-11-14%20231740.png)
+
+---
+
+# 3️⃣ Data Transformation (ETL/ELT)
+
+---
+
+## 📌 ADF Mapping Data Flows
+
+### 🔹 Transform Hospital Admissions
+
+Creates both **Daily** and **Weekly** datasets:
+
+![Hospital Data Flow](assets/Screenshot%202025-11-14%20221122.png)
+
+Includes:
+
+- Pivot
+- Aggregations
+- Join with country lookup
+- Weekly rollups
+
+---
+
+### 🔹 Transform Cases & Deaths
+
+![Cases Data Flow](assets/Screenshot%202025-11-14%20221152.png)
+
+Steps include:
+
+- Filter to European region
+- Pivot indicators
+- Lookup country metadata
+- Output curated dataset
+
+---
+
+## 📌 Databricks Transformations
+
+Stored in `/databricks_notebooks/`
+
+---
+
+### 🔹 Population Transformation Notebook
+
+`nb_transform_population_data.ipynb`
+
+Key steps:
+
+- Load `.tsv.gz`
+- Unpivot mixed columns
+- Map geo codes
+- Aggregate to age groups
+- Write processed output
+
+---
+
+### 🔹 Testing Data Notebook
+
+`nb_transform_testing_data.ipynb`
+
+- Clean daily testing data
+- Add ISO week numbers
+- Join dim tables
+- Write curated datasets
+
+---
+
+# 4️⃣ Loading Processed Data into SQL
+
+Each fact/dimension load is handled by ADF using simple Copy Activities:
+
+### ✔ Example: Hospital Admissions (Daily)
+
+![SQL hospital load](assets/Screenshot%202025-11-14%20232705.png)
+
+### ✔ Example: Cases & Deaths
+
+![SQL cases load](assets/Screenshot%202025-11-14%20232646.png)
+
+### ✔ Example: Testing Data
+
+![SQL testing load](assets/Screenshot%202025-11-14%20232625.png)
+
+---
+
+# 5️⃣ Orchestration & Automation
+
+A master pipeline runs all ingestion and transformations:
+
+- Input ingestion
+- Transformations (ADF Data Flows + Databricks)
+- SQL load
+- Power BI refresh trigger (optional)
+
+### ✔ Trigger
+
+Pipeline is scheduled using:
+
+- **Daily Schedule Trigger**
+- **Tumbling Window Trigger (for backfills)**
+
+---
+
+# 6️⃣ Monitoring & Alerting
 
 ### ✔ ADF Monitor
-- Pipeline run history  
-- Activity-level failures  
-- Trigger health checks  
 
-### ✔ Azure Monitor + Log Analytics
-- Logs pipeline failures  
-- Alerts on failure count thresholds  
-- Custom dashboards for SLA tracking  
+- Pipeline run views
+- Activity failures
+- Trigger history
 
----
+### ✔ Log Analytics + Alerts
 
-# 📊 Power BI Analytics
+Alerts configured for:
 
-A Power BI Report (PBIX) is created using SQL DB as the source.
-
-### Report Tabs Include:
-- Overview Dashboard  
-- Cases & Deaths Trend Analysis  
-- Hospital vs ICU Occupancy  
-- Testing & Positivity Rate  
-- Country Comparison  
-- Age Group Distribution  
-
-This makes insights accessible to leadership, analysts, and decision-makers.
+- Pipeline failures
+- Pipeline duration threshold
+- Missing files
 
 ---
 
-## 📬 Contact
+## 7️⃣ Power BI Dashboard – Covid-19 Trends
 
-**Name:** Rishikesh Gundla  
-**LinkedIn:** https://linkedin.com/in/rishikeshgundla 
+Located in:
+
+`power_bi_reports/Covid-19 Trends By Country.pbix`
+
+### **Dashboard Includes:**
+
+- Country-wise Covid-19 spread  
+- Daily & weekly cases  
+- ICU & hospital occupancy  
+- Testing volume & positivity rate  
+- Age-group impact analytics  
+- Multi-country comparison  
 
 ---
+
+## 📊 End-to-End Project Flow (Summary)
+
+### ✔ **Extract**
+
+- HTTP API → ADLS  
+- Blob Storage → ADLS  
+
+### ✔ **Validate**
+
+- File existence  
+- Column count check  
+- Metadata checks  
+
+### ✔ **Transform**
+
+- ADF Data Flows → pivot, aggregate, filter  
+- Databricks → heavy transformations  
+
+### ✔ **Load**
+
+- ADLS → Azure SQL Database (Star Schema)  
+
+### ✔ **Visualize**
+
+- Azure SQL → Power BI Dashboards  
 
