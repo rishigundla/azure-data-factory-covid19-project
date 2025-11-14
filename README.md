@@ -219,24 +219,10 @@ This makes insights accessible to leadership, analysts, and decision-makers.
 
 ---
 
-# ⭐ Recruiter-Focused Highlights
-
-This project demonstrates strong real-world data engineering skills:
-
-### ✔ End-to-end Data Pipeline Design  
-### ✔ Metadata-driven ADF pipelines  
-### ✔ Multi-engine transformation using Data Flows, Databricks & Hive   
-### ✔ Monitoring, Logging & alerting with Azure Monitor  
-### ✔ SQL Data Warehouse modeling  
-### ✔ BI-Ready Power BI Reports  
-
-This project showcases your ability to work as a **Cloud Data Engineer**, covering ingestion → transformation → orchestration → reporting.
-
----
-
 ## 📬 Contact
 
 **Name:** Rishikesh Gundla  
 **LinkedIn:** https://linkedin.com/in/rishikeshgundla 
+
 ---
 
