@@ -130,7 +130,9 @@ Key Features:
 
 ---
 
-### ✔ HDInsight Hive Transformations (Testing Data)
+### ✔ Databricks PySpark 
+
+## Testing Data
 - Cleans testing data  
 - Derives week information  
 - Joins reference dimensions  
@@ -138,8 +140,7 @@ Key Features:
 
 ---
 
-### ✔ Databricks PySpark (Population Data)
-Steps include:
+## Population Data
 
 1. Mount ADLS using service principal  
 2. Read population TSV  
