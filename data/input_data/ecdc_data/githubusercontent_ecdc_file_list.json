@@ -1,0 +1,22 @@
+[
+    {
+        "sourceURL":"https://raw.githubusercontent.com/cloudboxacademy/covid19/refs/heads/main/ecdc_data/",
+        "sinkFileName":"cases_deaths/cases_deaths.csv",
+		"sourceFileName":"cases_deaths.csv"
+    },
+    {
+        "sourceURL":"https://raw.githubusercontent.com/cloudboxacademy/covid19/refs/heads/main/ecdc_data/",
+        "sinkFileName":"hospital_admissions/hospital_admissions.csv",
+		"sourceFileName":"hospital_admissions.csv"
+    },
+    {
+        "sourceURL":"https://raw.githubusercontent.com/cloudboxacademy/covid19/refs/heads/main/ecdc_data/",
+        "sinkFileName":"testing/testing.csv",
+		"sourceFileName":"testing.csv"
+    },
+    {
+        "sourceURL":"https://raw.githubusercontent.com/cloudboxacademy/covid19/refs/heads/main/ecdc_data/",
+        "sinkFileName":"country_response/country_response.csv",
+		"sourceFileName":"country_response.csv"
+    }
+]
