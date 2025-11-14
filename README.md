@@ -81,9 +81,6 @@ Acts as the **orchestration engine**, responsible for:
 - Loading data into SQL DB
 - Pipeline scheduling & monitoring
 
-**ADF Pipelines:**  
-![Pipelines](assets/Screenshot%202025-11-14%20220923.png)
-
 ---
 
 ### 🔹 Azure Databricks
@@ -94,8 +91,6 @@ Used for transformations that require heavy compute:
 - Cleaning testing dataset
 - Creating aggregated age groups
 - Writing curated outputs to ADLS
-
-![Databricks pipeline activity](assets/Screenshot%202025-11-14%20221008.png)
 
 ---
 
@@ -138,7 +133,8 @@ ADF dynamically retrieves all available CSV files using:
 - **ForEach**
 - **Copy Activity**
 
-![ECDC pipeline](assets/Screenshot%202025-11-14%20221208.png)
+**ADF Pipelines:**  
+![Pipelines](assets/Screenshot%202025-11-14%20220923.png)
 
 ---
 
@@ -151,7 +147,7 @@ Pipeline performs:
 - Copy to raw zone
 - Delete source file if valid
 
-![Population pipeline](assets/Screenshot%202025-11-14%20231740.png)
+![Pipelines](assets/Screenshot%202025-11-14%20220943.png)
 
 ---
 
@@ -165,7 +161,8 @@ Pipeline performs:
 
 Creates both **Daily** and **Weekly** datasets:
 
-![Hospital Data Flow](assets/Screenshot%202025-11-14%20221122.png)
+![Hospital Data Flow](assets/Screenshot%202025-11-14%20221055.png)
+![Hospital Data Flow](assets/Screenshot%202025-11-14%20221040.png)
 
 Includes:
 
@@ -178,7 +175,8 @@ Includes:
 
 ### 🔹 Transform Cases & Deaths
 
-![Cases Data Flow](assets/Screenshot%202025-11-14%20221152.png)
+![Cases Data Flow](assets/Screenshot%202025-11-14%20221026.png)
+![Cases Data Flow](assets/Screenshot%202025-11-14%20221008.png)
 
 Steps include:
 
@@ -207,6 +205,8 @@ Key steps:
 - Aggregate to age groups
 - Write processed output
 
+![Cases Data Flow](assets/Screenshot%202025-11-14%20221138.png)
+
 ---
 
 ### 🔹 Testing Data Notebook
@@ -218,6 +218,8 @@ Key steps:
 - Join dim tables
 - Write curated datasets
 
+![Cases Data Flow](assets/Screenshot%202025-11-14%20221122.png)
+
 ---
 
 # 4️⃣ Loading Processed Data into SQL
@@ -226,15 +228,15 @@ Each fact/dimension load is handled by ADF using simple Copy Activities:
 
 ### ✔ Example: Hospital Admissions (Daily)
 
-![SQL hospital load](assets/Screenshot%202025-11-14%20232705.png)
+![SQL hospital load](assets/Screenshot%202025-11-14%20221208.png)
 
 ### ✔ Example: Cases & Deaths
 
-![SQL cases load](assets/Screenshot%202025-11-14%20232646.png)
+![SQL cases load](assets/Screenshot%202025-11-14%20221152.png)
 
 ### ✔ Example: Testing Data
 
-![SQL testing load](assets/Screenshot%202025-11-14%20232625.png)
+![SQL testing load](assets/Screenshot%202025-11-14%20221222.png)
 
 ---
 
@@ -317,3 +319,9 @@ Located in:
 
 - Azure SQL → Power BI Dashboards  
 
+---
+
+## 👨‍💻 Author
+**Rishikesh Gundla**  
+_Senior Business Intelligence Engineer | Data Engineering & Analytics Enthusiast_  
+🔗 [LinkedIn](https://www.linkedin.com/in/rishikeshgundla)
